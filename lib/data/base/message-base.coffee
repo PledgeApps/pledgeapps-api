@@ -1,0 +1,32 @@
+sys = require("sys")
+Global = require("../../global.coffee")
+
+class MessageBase
+	constructor: ( @id, @parentId, @submitterId, @receiverId, @contentType, @contentId ) ->
+		@id = 0 if not @id?
+	save: (cb) =>
+		columns = { parent_id: @parentId, submitter_id: @submitterId, receiver_id: @receiverId, content_type: @contentType, content_id: @contentId }
+		if @id == 0
+			Global.query "INSERT INTO messages SET ?", columns, (err, result) =>
+				sys.puts err if err?
+				@id=result.insertId
+				cb()
+		else
+			Global.query "UPDATE messages SET ? WHERE id = " + @id, columns, cb
+	@load = ( id, cb ) ->
+		Global.query "SELECT * FROM messages where id = " + id, null, (err, rows) =>
+			result = MessageBase.loadRow rows[0] if (rows.length>0)
+			cb(result);
+	@delete = ( id, cb ) ->
+		Global.query "DELETE FROM messages where id = " + id, null, (err, rows) =>
+			cb();
+	@loadRow = (row) ->
+		return new MessageBase row.id, row.parent_id, row.submitter_id, row.receiver_id, row.content_type, row.content_id
+	@loadFromQuery = ( query, params, cb ) ->
+		Global.query query, params, (err, rows) =>
+			sys.puts err if err?
+			result = null
+			result = MessageBase.loadRow rows[0] if rows.length>0
+			cb(result);
+
+module.exports = MessageBase
