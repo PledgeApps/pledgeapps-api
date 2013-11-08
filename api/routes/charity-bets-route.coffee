@@ -21,6 +21,12 @@ class CharityBetsRoute
 		if action=='appData'
 			CharityBetsModel.appData userId, (data) ->
 				res.end JSON.stringify(data)
+		if action=='mybets'
+			CharityBetsModel.myBets userId, (data) ->
+				res.end JSON.stringify(data)
+		if action=='openbets'
+			CharityBetsModel.openBets (data) ->
+				res.end JSON.stringify(data)
 		if action=='leaderboards'
 			PledgeAppsModel.leaderboards 'charitybets', userId, (data) ->
 				res.end JSON.stringify(data)

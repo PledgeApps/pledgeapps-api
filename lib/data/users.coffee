@@ -6,11 +6,11 @@ sys = require("sys")
 class Users extends UsersBase
 	getIds: () =>
 		result = []
-		@forEach (Ad) =>
-			result.push Ad.id
+		@forEach (user) =>
+			result.push user.id
 		result
 	@cast: (baseClass) ->
-		baseClass.__proto__ = Ads::
+		baseClass.__proto__ = Users::
 		return baseClass
 	@loadFromQuery: ( query, params, cb ) ->
 		UsersBase.loadFromQuery query, params, (data) ->
