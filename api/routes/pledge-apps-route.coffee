@@ -3,7 +3,12 @@ Config = require "../../config.coffee"
 PledgeAppsModel = require "../models/pledge-apps-model.coffee"
 
 class PledgeAppsRoute
-	@v1: (req, res) ->
+	@actionPost: (req, res) ->
+		userKey = req.body["k"]
+		PledgeAppsModel.userId userKey, (userId) ->
+			PledgeAppsRoute.processPost req, res, userId
+
+	@actionGet: (req, res) ->
 		userKey = req.query["k"]
 		if userKey?
 			PledgeAppsModel.userId userKey, (userId) ->
@@ -27,4 +32,19 @@ class PledgeAppsRoute
 			userId = req.query['userId']
 			PledgeAppsModel.publicUserData userId, (data) ->
 				res.end JSON.stringify(data)
+
+	@processPost: (req, res, userId) ->
+		action = req.body["a"]
+
+		res.setHeader 'Content-Type', 'application/json'
+		res.setHeader 'Access-Control-Allow-Origin', '*'
+
+		if action=='postMessage'
+			appName = req.body['appName']
+			contentType = req.body['contentType']
+			contentId = req.body['contentId']
+			body = req.body['body']
+			PledgeAppsModel.postMessage appName, contentType, contentId, userId, body, () ->
+				res.end "{}"
+		res.end
 module.exports = PledgeAppsRoute

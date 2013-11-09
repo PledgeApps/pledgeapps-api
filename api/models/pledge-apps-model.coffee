@@ -2,6 +2,7 @@ sys = require "sys"
 async = require "async"
 User = require "../../lib/data/user.coffee"
 Users = require "../../lib/data/users.coffee"
+Message = require "../../lib/data/message.coffee"
 Messages = require "../../lib/data/messages.coffee"
 Config = require "../../config.coffee"
 
@@ -41,4 +42,14 @@ class PledgeAppsModel
 	@publicUserData: (id, cb) ->
 		User.loadPublicData id, (data) ->
 			cb data
+	@postMessage: (appName, contentType, contentId, userId, body, cb) ->
+		Message m = new Message()
+		m.appName = appName
+		m.body = body
+		m.contentId = contentId
+		m.contentType = contentType
+		m.parentId = 0
+		m.senderId = userId
+		m.sentDate = new Date()
+		m.save cb
 module.exports = PledgeAppsModel

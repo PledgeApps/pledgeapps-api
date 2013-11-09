@@ -4,7 +4,12 @@ CharityBetsModel = require "../models/charity-bets-model.coffee"
 PledgeAppsModel = require "../models/pledge-apps-model.coffee"
 
 class CharityBetsRoute
-	@v1: (req, res) ->
+	@actionPost: (req, res) ->
+		userKey = req.query["k"]
+		PledgeAppsModel.userId userKey, (userId) ->
+			CharityBetsRoute.processPost req, res, userId
+
+	@actionGet: (req, res) ->
 		userKey = req.query["k"]
 		if userKey?
 			PledgeAppsModel.userId userKey, (userId) ->
@@ -40,4 +45,8 @@ class CharityBetsRoute
 		else if action=='giversLeaderboard'
 			PledgeAppsModel.giversLeaderboard 'charitybets', userId, (data) ->
 				res.end JSON.stringify(data)
+
+	@processPost: (req, res, userId) ->
+		res.end
+
 module.exports = CharityBetsRoute

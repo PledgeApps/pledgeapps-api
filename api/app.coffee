@@ -10,7 +10,7 @@ CharityBetsRoute = require "./routes/charity-bets-route.coffee"
 app = express()
 
 app.configure () ->
-	app.set 'port', process.env.PORT || 3101
+	app.set 'port', process.env.PORT || 3102
 	app.set 'views', __dirname + '/views'
 	app.set 'view engine', 'jade'
 	app.locals._ = require "underscore"
@@ -30,8 +30,10 @@ app.configure () ->
 #		console.log "Caught exception: " + err
 #		res.send(500, 'An unexpected error occurred.  Please return to the home page and try again.');
 
-app.get "/", PledgeAppsRoute.v1
-app.get "/charitybets/", CharityBetsRoute.v1
+app.get "/", PledgeAppsRoute.actionGet
+app.post "/", PledgeAppsRoute.actionPost
+app.get "/charitybets/", CharityBetsRoute.actionGet
+app.post "/charitybets/", CharityBetsRoute.actionPost
 
 
 http.createServer(app).listen app.get('port'), ()->
