@@ -2,6 +2,7 @@ sys = require "sys"
 async = require "async"
 User = require "../../lib/data/user.coffee"
 Users = require "../../lib/data/users.coffee"
+Messages = require "../../lib/data/messages.coffee"
 Config = require "../../config.coffee"
 
 class PledgeAppsModel
@@ -31,7 +32,13 @@ class PledgeAppsModel
 	@giversLeaderboard: (appName, userId, cb) ->
 		Users.loadGiversLeaderboard appName, userId, (data) ->
 			cb data
+	@contentMessages: (appName, contentType, contentId, cb) ->
+		Messages.loadMessageForContent appName, contentType, contentId, (data) ->
+			cb data
 	@userId: (privateKey, cb) ->
 		User.loadByPrivateKey privateKey, (user) ->
 			cb user.id
+	@publicUserData: (id, cb) ->
+		User.loadPublicData id, (data) ->
+			cb data
 module.exports = PledgeAppsModel

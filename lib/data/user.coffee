@@ -14,4 +14,9 @@ class User extends UserBase
 			cb User.cast(data)
 	@loadByPrivateKey: (privateKey, cb) ->
 		User.loadFromQuery "SELECT * FROM users where private_key=" + Global.escape(privateKey), {}, cb
+	@loadPublicData: (id, cb) ->
+		sql = "SELECT id, user_name, registration_date FROM Users WHERE id=" + Global.escape(id)
+		Global.query sql, {}, (err, rows) ->
+			cb rows
+	
 module.exports = User

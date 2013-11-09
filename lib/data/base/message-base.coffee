@@ -2,10 +2,10 @@ sys = require("sys")
 Global = require("../../global.coffee")
 
 class MessageBase
-	constructor: ( @id, @parentId, @submitterId, @receiverId, @contentType, @contentId ) ->
+	constructor: ( @id, @parentId, @senderId, @appName, @sentDate, @contentType, @contentId, @body ) ->
 		@id = 0 if not @id?
 	save: (cb) =>
-		columns = { parent_id: @parentId, submitter_id: @submitterId, receiver_id: @receiverId, content_type: @contentType, content_id: @contentId }
+		columns = { parent_id: @parentId, sender_id: @senderId, app_name: @appName, sent_date: @sentDate, content_type: @contentType, content_id: @contentId, body: @body }
 		if @id == 0
 			Global.query "INSERT INTO messages SET ?", columns, (err, result) =>
 				sys.puts err if err?
@@ -21,7 +21,7 @@ class MessageBase
 		Global.query "DELETE FROM messages where id = " + id, null, (err, rows) =>
 			cb();
 	@loadRow = (row) ->
-		return new MessageBase row.id, row.parent_id, row.submitter_id, row.receiver_id, row.content_type, row.content_id
+		return new MessageBase row.id, row.parent_id, row.sender_id, row.app_name, row.sent_date, row.content_type, row.content_id, row.body
 	@loadFromQuery = ( query, params, cb ) ->
 		Global.query query, params, (err, rows) =>
 			sys.puts err if err?

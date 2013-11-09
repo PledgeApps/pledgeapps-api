@@ -21,19 +21,23 @@ class CharityBetsRoute
 		if action=='appData'
 			CharityBetsModel.appData userId, (data) ->
 				res.end JSON.stringify(data)
-		if action=='mybets'
+		else if action=='myBets'
 			CharityBetsModel.myBets userId, (data) ->
 				res.end JSON.stringify(data)
-		if action=='openbets'
+		else if action=='openBets'
 			CharityBetsModel.openBets (data) ->
 				res.end JSON.stringify(data)
-		if action=='leaderboards'
+		else if action=='userDetails'
+			tmpUserId = req.query["userId"]
+			CharityBetsModel.userDetails tmpUserId, (data) ->
+				res.end JSON.stringify(data)
+		else if action=='leaderboards'
 			PledgeAppsModel.leaderboards 'charitybets', userId, (data) ->
 				res.end JSON.stringify(data)
-		if action=='winners_leaderboard'
+		else if action=='winnersLeaderboard'
 			PledgeAppsModel.winnersLeaderboard 'charitybets', userId, (data) ->
 				res.end JSON.stringify(data)
-		else if action=='givers_leaderboard'
+		else if action=='giversLeaderboard'
 			PledgeAppsModel.giversLeaderboard 'charitybets', userId, (data) ->
 				res.end JSON.stringify(data)
 module.exports = CharityBetsRoute
