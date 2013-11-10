@@ -32,8 +32,16 @@ class CharityBetsRoute
 		else if action=='openBets'
 			CharityBetsModel.openBets (data) ->
 				res.end JSON.stringify(data)
+		else if action=='acceptBet'
+			betId = parseInt(req.query["betId"])
+			CharityBetsModel.acceptBet userId, betId, () ->
+				res.end "{}"
+		else if action=='rejectBet'
+			betId = parseInt(req.query["betId"])
+			CharityBetsModel.rejectBet userId, betId, () ->
+				res.end "{}"
 		else if action=='userDetails'
-			tmpUserId = req.query["userId"]
+			tmpUserId = parseInt(req.query["userId"])
 			CharityBetsModel.userDetails tmpUserId, (data) ->
 				res.end JSON.stringify(data)
 		else if action=='leaderboards'
@@ -45,6 +53,8 @@ class CharityBetsRoute
 		else if action=='giversLeaderboard'
 			PledgeAppsModel.giversLeaderboard 'charitybets', userId, (data) ->
 				res.end JSON.stringify(data)
+		
+
 
 	@processPost: (req, res, userId) ->
 		res.end

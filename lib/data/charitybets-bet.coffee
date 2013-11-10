@@ -12,4 +12,18 @@ class CharityBet extends CharityBetBase
 	@loadFromQuery = ( query, params, cb ) ->
 		CharityBetBase.loadFromQuery query, params, (data) ->
 			cb CharityBet.cast(data)
+	@load: ( id, cb ) ->
+		CharityBetBase.load id, (data) ->
+			cb CharityBet.cast(data)
+	accept: (userId, cb) ->
+		@acceptanceDate = new Date
+		@acceptorId = userId
+		@status = 'accepted'
+		@save cb
+	reject: (userId, cb) ->
+		@acceptanceDate = new Date
+		@acceptorId = userId
+		@status = 'cancelled'
+		@save cb
+
 module.exports = CharityBet

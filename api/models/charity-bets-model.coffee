@@ -1,5 +1,6 @@
 sys = require "sys"
 async = require "async"
+CharityBetsBet = require "../../lib/data/charitybets-bet.coffee"
 CharityBetsBets = require "../../lib/data/charitybets-bets.coffee"
 PledgeAppsModel = require "./pledge-apps-model.coffee"
 
@@ -24,6 +25,16 @@ class CharityBetsModel
 		CharityBetsBets.loadOpenPublicBets cb
 	@myBets: (userId, cb) ->
 		CharityBetsBets.loadUsersBets userId, cb
+	@acceptBet: (userId, betId, cb) ->
+		#todo make sure the user can accept this bet
+		CharityBetsBet.load betId, (bet) ->
+			bet.accept userId, cb
+		#log a message
+	@rejectBet: (userId, betId, cb) ->
+		#todo make sure the user can reject this bet
+		ChartBetsBet.load betId, (bet) ->
+			bet.reject userId, cb
+		#log a message
 	@userDetails: (userId, cb) ->
 		console.log userId
 		async.parallel [(callback) =>
