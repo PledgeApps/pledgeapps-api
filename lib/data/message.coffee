@@ -12,4 +12,15 @@ class Message extends MessageBase
 	@loadFromQuery = ( query, params, cb ) ->
 		MessageBase.loadFromQuery query, params, (data) ->
 			cb Message.cast(data)
+	@post: (appName, contentType, contentId, senderId, isSystem, body, cb) ->
+		Message m = new Message()
+		m.appName = appName
+		m.body = body
+		m.contentId = contentId
+		m.contentType = contentType
+		m.parentId = 0
+		m.senderId = senderId
+		m.sentDate = new Date()
+		m.isSystem = isSystem
+		m.save cb
 module.exports = Message

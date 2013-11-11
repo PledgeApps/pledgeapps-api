@@ -25,5 +25,9 @@ class CharityBet extends CharityBetBase
 		@acceptorId = userId
 		@status = 'cancelled'
 		@save cb
+	admitDefeat: (userId, cb) ->
+		@winnerId = (if (userId==@submitterId) then @acceptorId else @submitterId)
+		@status = 'settled'
+		@save cb
 
 module.exports = CharityBet

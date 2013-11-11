@@ -36,20 +36,15 @@ class PledgeAppsModel
 	@contentMessages: (appName, contentType, contentId, cb) ->
 		Messages.loadMessageForContent appName, contentType, contentId, (data) ->
 			cb data
+	@user: (privateKey, cb) ->
+		User.loadByPrivateKey privateKey, (user) ->
+			cb user
 	@userId: (privateKey, cb) ->
 		User.loadByPrivateKey privateKey, (user) ->
 			cb user.id
 	@publicUserData: (id, cb) ->
 		User.loadPublicData id, (data) ->
 			cb data
-	@postMessage: (appName, contentType, contentId, userId, body, cb) ->
-		Message m = new Message()
-		m.appName = appName
-		m.body = body
-		m.contentId = contentId
-		m.contentType = contentType
-		m.parentId = 0
-		m.senderId = userId
-		m.sentDate = new Date()
-		m.save cb
+	@postMessage: (appName, contentType, contentId, senderId, isSystem, body, cb) ->
+		Message.post appName, contentType, contentId, senderId, isSystem, body, cb
 module.exports = PledgeAppsModel

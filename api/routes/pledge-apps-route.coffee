@@ -44,7 +44,7 @@ class PledgeAppsRoute
 			contentType = req.body['contentType']
 			contentId = req.body['contentId']
 			body = req.body['body']
-			PledgeAppsModel.postMessage appName, contentType, contentId, userId, body, () ->
+			PledgeAppsModel.postMessage appName, contentType, contentId, userId, false, body, () ->
 				res.end "{}"
 		res.end
 module.exports = PledgeAppsRoute

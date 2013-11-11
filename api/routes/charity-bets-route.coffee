@@ -12,12 +12,13 @@ class CharityBetsRoute
 	@actionGet: (req, res) ->
 		userKey = req.query["k"]
 		if userKey?
-			PledgeAppsModel.userId userKey, (userId) ->
-				CharityBetsRoute.processRequest req, res, userId
+			PledgeAppsModel.user userKey, (user) ->
+				CharityBetsRoute.processRequest req, res, user
 		else
 			CharityBetsRoute.processRequest req, res, 0
 	
-	@processRequest: (req, res, userId) ->
+	@processRequest: (req, res, user) ->
+		userId = (if (user==null) then 0 else user.id)
 		action = req.query["a"]
 
 		res.setHeader 'Content-Type', 'application/json'
@@ -34,11 +35,19 @@ class CharityBetsRoute
 				res.end JSON.stringify(data)
 		else if action=='acceptBet'
 			betId = parseInt(req.query["betId"])
-			CharityBetsModel.acceptBet userId, betId, () ->
+			CharityBetsModel.acceptBet user, betId, () ->
 				res.end "{}"
 		else if action=='rejectBet'
 			betId = parseInt(req.query["betId"])
-			CharityBetsModel.rejectBet userId, betId, () ->
+			CharityBetsModel.rejectBet user, betId, () ->
+				res.end "{}"
+		else if action=='claimVictory'
+			betId = parseInt(req.query["betId"])
+			CharityBetsModel.claimVictory user, betId, () ->
+				res.end "{}"
+		else if action=='admitDefeat'
+			betId = parseInt(req.query["betId"])
+			CharityBetsModel.admitDefeat user, betId, () ->
 				res.end "{}"
 		else if action=='userDetails'
 			tmpUserId = parseInt(req.query["userId"])
