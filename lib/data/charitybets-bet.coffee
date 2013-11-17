@@ -1,20 +1,28 @@
 sys = require("sys")
-CharityBetBase = require("./base/charitybets-bet-base.coffee")
+CharityBetsBetBase = require("./base/charitybets-bet-base.coffee")
 Global = require "../global.coffee"
 
-class CharityBet extends CharityBetBase
+class CharityBetsBet extends CharityBetsBetBase
 	@cast = (baseClass) ->
 		if baseClass != null
 			baseClass.__proto__ = CharityBet::
 		return baseClass
 	@loadRow = (row) ->
-		 CharityBet.cast(CharityBetBase.loadRow row)
+		 CharityBetsBet.cast(CharityBetsBetBase.loadRow row)
 	@loadFromQuery = ( query, params, cb ) ->
-		CharityBetBase.loadFromQuery query, params, (data) ->
-			cb CharityBet.cast(data)
+		CharityBetsBetBase.loadFromQuery query, params, (data) ->
+			cb CharityBetsBet.cast(data)
 	@load: ( id, cb ) ->
-		CharityBetBase.load id, (data) ->
-			cb CharityBet.cast(data)
+		CharityBetsBetBase.load id, (data) ->
+			cb CharityBetsBet.cast(data)
+	@post: (submitterId, acceptorId, amount, title, eventDate, cb) ->
+		bet = new CharityBetsBet()
+		bet.submitterId = submitterId
+		bet.acceptorId = acceptorId
+		bet.amount = amount
+		bet.title = title
+		bet.eventDate = eventDate
+		bet.save cb
 	accept: (userId, cb) ->
 		@acceptanceDate = new Date
 		@acceptorId = userId
@@ -30,4 +38,4 @@ class CharityBet extends CharityBetBase
 		@status = 'settled'
 		@save cb
 
-module.exports = CharityBet
+module.exports = CharityBetsBet

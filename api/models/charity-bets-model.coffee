@@ -26,6 +26,8 @@ class CharityBetsModel
 		CharityBetsBets.loadOpenPublicBets cb
 	@myBets: (userId, cb) ->
 		CharityBetsBets.loadUsersBets userId, cb
+	@postBet: (submitterId, acceptorId, amount, title, eventDate, cb) ->
+		CharityBetsBet.post submitterId, acceptorId, amount, title, eventDate, cb
 	@acceptBet: (user, betId, cb) ->
 		#todo make sure the user can accept this bet
 		CharityBetsBet.load betId, (bet) ->

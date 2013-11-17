@@ -5,9 +5,9 @@ PledgeAppsModel = require "../models/pledge-apps-model.coffee"
 
 class CharityBetsRoute
 	@actionPost: (req, res) ->
-		userKey = req.query["k"]
-		PledgeAppsModel.userId userKey, (userId) ->
-			CharityBetsRoute.processPost req, res, userId
+		userKey = req.body["k"]
+		PledgeAppsModel.user userKey, (user) ->
+			CharityBetsRoute.processPost req, res, user
 
 	@actionGet: (req, res) ->
 		userKey = req.query["k"]
@@ -65,7 +65,21 @@ class CharityBetsRoute
 		
 
 
-	@processPost: (req, res, userId) ->
+	@processPost: (req, res, user) ->
+		action = req.body["a"]
+		console.log user
+
+		res.setHeader 'Content-Type', 'application/json'
+		res.setHeader 'Access-Control-Allow-Origin', '*'
+
+		if action=='postBet'
+			acceptorId = req.body['acceptorId']
+			amount = req.body['amount']
+			title = req.body['title']
+			eventDate = req.body['eventDate']
+
+			CharityBetsModel.postBet user.id, acceptorId, amount, title, eventDate, () ->
+				res.end "{}"
 		res.end
 
 module.exports = CharityBetsRoute
